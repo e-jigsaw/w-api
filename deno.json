@@ -1,4 +1,6 @@
 {
-  "tasks": {},
+  "tasks": {
+    "dev": "deno run -A mod.ts"
+  },
   "importMap": "./import_map.json"
 }
