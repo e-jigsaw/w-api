@@ -75,7 +75,7 @@ app.get("/search", async ({ req, ...c }) => {
   const p = parseInt(url.searchParams.get("p") ?? "0");
   if (q) {
     const { data, error } = await client.rpc("search_title", {
-      q_arg: decodeURIComponent(q),
+      q_arg: `%${decodeURIComponent(q)}%`,
       offset_arg: p * 100,
       limit_arg: (p + 1) * 100,
     });
