@@ -1,4 +1,3 @@
-import { serve } from "server";
 import { Hono } from "hono";
 import { client } from "./lib/getClient.ts";
 
@@ -70,5 +69,31 @@ app.get("/recent_clips", async (c) => {
     payload: data,
   });
 });
+app.get("/search", async ({ req, ...c }) => {
+  const url = new URL(req.url);
+  const q = url.searchParams.get("q");
+  const p = parseInt(url.searchParams.get("p") ?? "0");
+  if (q) {
+    const { data, error } = await client.rpc("search", {
+      q_arg: q,
+      offset_arg: p * 100,
+      limit_arg: (p + 1) * 100,
+    });
+    if (error) {
+      console.error(error);
+      c.status(500);
+      return c.json({
+        ok: false,
+      });
+    }
+    return c.json({
+      ok: true,
+      payload: data,
+    });
+  }
+  return c.json({
+    ok: false,
+  });
+});
 
-serve(app.fetch);
+Deno.serve(app.fetch);
