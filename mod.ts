@@ -74,7 +74,7 @@ app.get("/search", async ({ req, ...c }) => {
   const q = url.searchParams.get("q");
   const p = parseInt(url.searchParams.get("p") ?? "0");
   if (q) {
-    const { data, error } = await client.rpc("search", {
+    const { data, error } = await client.rpc("search_title", {
       q_arg: q,
       offset_arg: p * 100,
       limit_arg: (p + 1) * 100,
