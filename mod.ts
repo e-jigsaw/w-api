@@ -7,7 +7,7 @@ app.get("/latest_articles", async ({ req, ...c }) => {
   const url = new URL(req.url);
   const p = parseInt(url.searchParams.get("p") ?? "0");
   const { data, error } = await client.rpc("latest_articles", {
-    offset_arg: (p + 1) * 20,
+    offset_arg: p * 20,
     limit_arg: 20,
   });
   if (error) {
@@ -26,7 +26,7 @@ app.get("/clips", async ({ req, ...c }) => {
   const url = new URL(req.url);
   const p = parseInt(url.searchParams.get("p") ?? "0");
   const { data, error } = await client.rpc("latest_clips", {
-    offset_arg: (p + 1) * 20,
+    offset_arg: p * 20,
     limit_arg: 20,
   });
   if (error) {
@@ -76,7 +76,7 @@ app.get("/search", async ({ req, ...c }) => {
   if (q) {
     const { data, error } = await client.rpc("search_title", {
       q_arg: `%${decodeURIComponent(q)}%`,
-      offset_arg: (p + 1) * 100,
+      offset_arg: p * 100,
       limit_arg: 100,
     });
     if (error) {
