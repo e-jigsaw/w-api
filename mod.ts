@@ -95,5 +95,28 @@ app.get("/search", async ({ req, ...c }) => {
     ok: false,
   });
 });
+app.get('/title_to_id', async ({ req, ...c }) => {
+  const url = new URL(req.url);
+  const title = url.searchParams.get('title');
+  if (title) {
+    const { data, error } = await client.rpc('title_to_id', {
+      title_arg: title
+    });
+    if (error) {
+      console.error(error);
+      c.status(500);
+      return c.json({
+        ok: false
+      });
+    }
+    return c.json({
+      ok: true,
+      payload: data
+    });
+  }
+  return c.json({
+    ok: false
+  });
+});
 
 Deno.serve(app.fetch);
