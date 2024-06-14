@@ -118,5 +118,28 @@ app.get('/title_to_id', async ({ req, ...c }) => {
     ok: false
   });
 });
+app.get('/id_to_title', async ({ req, ...c }) => {
+  const url = new URL(req.url);
+  const id = url.searchParams.get('id');
+  if (id) {
+    const { data, error } = await client.rpc('id_to_title', {
+      id_arg: parseInt(id)
+    });
+    if (error) {
+      console.error(error);
+      c.status(500);
+      return c.json({
+        ok: false
+      });
+    }
+    return c.json({
+      ok: true,
+      payload: data
+    });
+  }
+  return c.json({
+    ok: false
+  });
+});
 
 Deno.serve(app.fetch);
